@@ -1,15 +1,18 @@
-"use server"
+"use server";
 
 import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
+import { v4 as uuidv4 } from "uuid";
 import { FirebaseGateway } from "../gateway/firebase/firebase.gateway";
 import { firmwareRepo } from "../repository/mongodb/firmware";
-import { v4 as uuidv4 } from 'uuid'
 
-const firebaseGateway = new FirebaseGateway()
+const firebaseGateway = new FirebaseGateway();
 
 export async function createFirmware(formData: FormData) {
-  const { file, name, description, version } = Object.fromEntries(formData.entries()) as unknown as { name: string, description: string, version: string, file: File };
-  const { url, bucket } = await firebaseGateway.uploadFile(file)
+  const { file, name, description, version } = Object.fromEntries(
+    formData.entries()
+  ) as unknown as { name: string; description: string; version: string; file: File };
+  const { url, bucket } = await firebaseGateway.uploadFile(file);
 
   await firmwareRepo.create({
     uuid: uuidv4(),
@@ -19,16 +22,19 @@ export async function createFirmware(formData: FormData) {
     created_at: new Date(),
     url,
     bucket,
-    current: false
-  })
+    current: false,
+  });
+
+  revalidatePath("/home");
+  redirect("/home");
 }
 
 export async function listFirmware() {
-  return firmwareRepo.list()
+  return firmwareRepo.list();
 }
 
 export async function changeCurrent(uuid: string) {
-  await firmwareRepo.updateMany({ query: {}, value: { current: false } })
-  await firmwareRepo.updateOne({ query: { uuid }, value: { current: true } })
-  revalidatePath("/home")
+  await firmwareRepo.updateMany({ query: {}, value: { current: false } });
+  await firmwareRepo.updateOne({ query: { uuid }, value: { current: true } });
+  revalidatePath("/home");
 }
