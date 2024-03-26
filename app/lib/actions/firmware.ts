@@ -25,8 +25,8 @@ export async function createFirmware(formData: FormData) {
     current: false,
   });
 
-  revalidatePath("/home");
-  redirect("/home");
+  revalidatePath("/");
+  redirect("/");
 }
 
 export async function listFirmware() {
@@ -36,5 +36,5 @@ export async function listFirmware() {
 export async function changeCurrent(uuid: string) {
   await firmwareRepo.updateMany({ query: {}, value: { current: false } });
   await firmwareRepo.updateOne({ query: { uuid }, value: { current: true } });
-  revalidatePath("/home");
+  revalidatePath("/");
 }
