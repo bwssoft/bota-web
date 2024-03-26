@@ -1,23 +1,19 @@
 import { createFirmware } from "@/app/lib/actions/firmware";
+import { Button } from "../../components/button";
 
 export default function CreateFirmwareForm() {
   return (
     <form action={createFirmware}>
       <div className="space-y-12">
         <div className="border-b border-gray-900/10 pb-12">
-          <h2 className="text-base font-semibold leading-7 text-gray-900">
-            Firmware
-          </h2>
+          <h2 className="text-base font-semibold leading-7 text-gray-900">Firmware</h2>
           <p className="mt-1 text-sm leading-6 text-gray-600">
             Preencha os dados abaixo para registrar um novo firmware.
           </p>
 
           <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
             <div className="sm:col-span-4">
-              <label
-                htmlFor="name"
-                className="block text-sm font-medium leading-6 text-gray-900"
-              >
+              <label htmlFor="name" className="block text-sm font-medium leading-6 text-gray-900">
                 Nome
               </label>
               <div className="mt-2">
@@ -77,10 +73,7 @@ export default function CreateFirmwareForm() {
             </div>
 
             <div className="col-span-full">
-              <label
-                htmlFor="file"
-                className="block text-sm font-medium leading-6 text-gray-900"
-              >
+              <label htmlFor="file" className="block text-sm font-medium leading-6 text-gray-900">
                 Arquivo
               </label>
               <div className="mt-2 flex items-center gap-x-3">
@@ -92,18 +85,10 @@ export default function CreateFirmwareForm() {
       </div>
 
       <div className="mt-6 flex items-center justify-end gap-x-6">
-        <button
-          type="reset"
-          className="text-sm font-semibold leading-6 text-gray-900"
-        >
+        <button type="reset" className="text-sm font-semibold leading-6 text-gray-900">
           Limpar
         </button>
-        <button
-          type="submit"
-          className="rounded-md bg-gray-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-gray-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-600"
-        >
-          Criar
-        </button>
+        <Button type="submit">Criar</Button>
       </div>
     </form>
   );
