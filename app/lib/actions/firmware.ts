@@ -12,7 +12,7 @@ export async function createFirmware(formData: FormData) {
   const { file, name, description, version } = Object.fromEntries(
     formData.entries()
   ) as unknown as { name: string; description: string; version: string; file: File };
-  const { url, bucket } = await firebaseGateway.uploadFile(file);
+  const { url, bucket, name: file_name } = await firebaseGateway.uploadFile(file);
 
   await firmwareRepo.create({
     uuid: uuidv4(),
@@ -20,9 +20,12 @@ export async function createFirmware(formData: FormData) {
     description,
     version,
     created_at: new Date(),
-    url,
-    bucket,
     current: false,
+    file: {
+      url,
+      bucket,
+      name: file_name
+    }
   });
 
   revalidatePath("/");

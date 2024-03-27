@@ -40,7 +40,7 @@ export const columns: ColumnDef<Firmware>[] = [
     cell: ({ row }) => {
       const firmware = row.original;
       return (
-        <Link href={firmware.url} target="_blank">
+        <Link href={firmware.file.url} target="_blank">
           Baixar
         </Link>
       );

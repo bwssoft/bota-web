@@ -5,6 +5,9 @@ export interface Firmware {
   description: string
   version: string
   current: boolean
-  url: string
-  bucket: string
+  file: {
+    url: string
+    bucket: string
+    name: string
+  }
 }

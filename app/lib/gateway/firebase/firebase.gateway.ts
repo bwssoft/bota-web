@@ -11,10 +11,10 @@ export class FirebaseGateway {
     this._storage = getStorage(this._app);
   }
 
-  async uploadFile(input: File): Promise<{ url: string, bucket: string }> {
+  async uploadFile(input: File): Promise<{ url: string, bucket: string, name: string }> {
     const { name, type } = input
 
-    const _name = name.replace(/[^a-zA-Z0-9]/g, "")
+    const _name = name.replace(/ /g, "") //replace(/[^a-zA-Z0-9]/g, "")
 
     const bucket = `bota/upload-files/${_name}`
 
@@ -33,7 +33,8 @@ export class FirebaseGateway {
 
     return {
       url: fileUrl,
-      bucket
+      bucket,
+      name: _name
     };
   };
 
