@@ -1,12 +1,15 @@
 "use client";
-import { Fragment } from "react";
+import { ChangeEvent, Fragment } from "react";
 import { Menu, Popover, Transition } from "@headlessui/react";
 import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { MagnifyingGlassIcon } from "@heroicons/react/20/solid";
 import { cn } from "@/app/util/cn";
 import FirmwareTable from "../tables/firmware/table";
-import DeviceTable from "../tables/device/table";
+import InteractionTable from "../tables/interaction/table";
 import { Firmware } from "@/app/lib/definitions/firmware";
+import { Interaction } from "@/app/lib/definitions/interaction";
+import { usePathname, useRouter } from "next/navigation";
+import { formatSearchParams } from "@/app/util/format-search-params";
 
 const user = {
   name: "Tom Cook",
@@ -27,8 +30,21 @@ const userNavigation = [
   { name: "Sign out", href: "#" },
 ];
 
-export default function HomePageUi(params: { firmwares: Firmware[] }) {
-  const { firmwares } = params;
+export default function HomePageUi(params: {
+  firmwares: Firmware[];
+  interactions: (Interaction & { firmware: Firmware })[];
+}) {
+  const { firmwares, interactions } = params;
+
+  const pathname = usePathname();
+  const router = useRouter();
+
+  const handleSearch = (e: ChangeEvent<HTMLInputElement>) => {
+    const params = formatSearchParams({
+      imei: e.target.value,
+    });
+    router.push(`${pathname}?${params}`);
+  };
   return (
     <>
       {/*
@@ -115,9 +131,10 @@ export default function HomePageUi(params: { firmwares: Firmware[] }) {
                         <input
                           id="desktop-search"
                           className="block w-full rounded-md border-0 bg-white/20 py-1.5 pl-10 pr-3 text-white placeholder:text-white focus:bg-white focus:text-gray-900 focus:ring-0 focus:placeholder:text-gray-500 sm:text-sm sm:leading-6"
-                          placeholder="Search"
+                          placeholder="Procure pelo imei"
                           type="search"
                           name="search"
+                          onChange={handleSearch}
                         />
                       </div>
                     </div>
@@ -144,7 +161,7 @@ export default function HomePageUi(params: { firmwares: Firmware[] }) {
                   </div>
                 </div>
                 <div className="hidden border-t border-white border-opacity-20 py-5 lg:block">
-                  <div className="grid grid-cols-3 items-center gap-8">
+                  <div className="grid grid-cols-4 items-center gap-8">
                     <div className="col-span-2">
                       <nav className="flex space-x-4">
                         {navigation.map((item) => (
@@ -162,8 +179,8 @@ export default function HomePageUi(params: { firmwares: Firmware[] }) {
                         ))}
                       </nav>
                     </div>
-                    <div>
-                      <div className="mx-auto w-full max-w-md">
+                    <div className="col-span-2">
+                      <div className="mx-auto w-full">
                         <label htmlFor="mobile-search" className="sr-only">
                           Search
                         </label>
@@ -177,9 +194,10 @@ export default function HomePageUi(params: { firmwares: Firmware[] }) {
                           <input
                             id="mobile-search"
                             className="block w-full rounded-md border-0 bg-white/20 py-1.5 pl-10 pr-3 text-white placeholder:text-white focus:bg-white focus:text-gray-900 focus:ring-0 focus:placeholder:text-gray-500 sm:text-sm sm:leading-6"
-                            placeholder="Search"
+                            placeholder="Procure pelo imei"
                             type="search"
                             name="search"
+                            onChange={handleSearch}
                           />
                         </div>
                       </div>
@@ -321,10 +339,10 @@ export default function HomePageUi(params: { firmwares: Firmware[] }) {
           )}
         </Popover>
         <main className="-mt-24 pb-8">
-          <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:max-w-7xl lg:px-8">
+          <div className="mx-auto  px-4 sm:px-6 lg:max-w-7xl lg:px-8">
             <h1 className="sr-only">Page title</h1>
             {/* Main 3 column grid */}
-            <div className="grid grid-cols-1 items-start gap-4 lg:grid-cols-3 lg:gap-8">
+            <div className="grid grid-cols-1 items-start gap-4 lg:grid-cols-4 lg:gap-8">
               {/* Left column */}
               <div className="grid grid-cols-1 gap-4 lg:col-span-2">
                 <section aria-labelledby="section-1-title">
@@ -342,7 +360,7 @@ export default function HomePageUi(params: { firmwares: Firmware[] }) {
               </div>
 
               {/* Right column */}
-              <div className="grid grid-cols-1 gap-4">
+              <div className="grid grid-cols-1 gap-4 lg:col-span-2">
                 <section aria-labelledby="section-2-title">
                   <h2 className="sr-only" id="section-2-title">
                     Section title
@@ -350,7 +368,7 @@ export default function HomePageUi(params: { firmwares: Firmware[] }) {
                   <div className="overflow-hidden rounded-lg bg-white shadow">
                     <div className="p-6">
                       <div className="min-h-[400px]">
-                        <DeviceTable />
+                        <InteractionTable interactions={interactions} />
                       </div>
                     </div>
                   </div>

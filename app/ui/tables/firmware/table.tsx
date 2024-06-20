@@ -3,7 +3,7 @@ import { DataTable } from "../../components/table";
 import { columns } from "./columns";
 import { Firmware } from "@/app/lib/definitions/firmware";
 
-export default async function FirmwareTable(params: { data: Firmware[] }) {
+export default function FirmwareTable(params: { data: Firmware[] }) {
   const { data } = params;
   return (
     <>
